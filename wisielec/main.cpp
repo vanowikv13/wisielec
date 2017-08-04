@@ -2,10 +2,14 @@
 //
 
 #include "stdafx.h"
+#include "MENU.h"
 
 
-int main()
-{
+int main(){
+
+	MENU m;
+
+	system("pause");
     return 0;
 }
 
