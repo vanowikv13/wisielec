@@ -7,9 +7,8 @@
 
 int main(){
 
+	MENU::setTheme(MENU::Theme::DARK);
 	MENU m;
-
-	system("pause");
     return 0;
 }
 

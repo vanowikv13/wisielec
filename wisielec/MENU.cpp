@@ -25,55 +25,52 @@ MENU::~MENU()
 
 }
 
+void MENU::setTheme(Theme thm = Theme::LIGHT)
+{
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	switch (thm) {
+	case Theme::DARK:
+		SetConsoleTextAttribute(hConsole, 15);
+		break;
+	case Theme::LIGHT:
+		SetConsoleTextAttribute(hConsole, 44);
+		break;
+	default:
+
+		break;
+	}
+}
+
 void MENU::gameLoop() {
-	int a = 0,x = 0, index = 0; std::vector<std::string> tab = { "1.START","2.OPTIONS","3.EXIT" };
+	int index = 0;
 	while (true)
 	{
-
-		do {
-			system("cls");
-			for (auto it = tab.begin(); it < tab.end(); it++, a++) {
-				if (index == a)
-					std::cout << "+";
-				else std::cout << " ";
-				std::cout << *it << std::endl;
+		conk({ "1.START","2.OPTIONS","3.EXIT" }, "WELLCOME IN AMAZING GAME");
+		index = conk.keyOptionWork();
+		switch (index) {
+		case 0:
+			if (play())
+				std::cout << "You WIN!!!!" << std::endl;
+			else {
+				std::cout << "You don't win :(" << std::endl;
+				std::cout << "The answer was : " << w->retPass() << std::endl;
+				std::cout << "pers any kind of key to continue " << std::endl;
 			}
-			x = _getch();
-			if (a > 2)
-				a = 0;
-			index = controlKey(0, 2, 0, 2, index, x);
-		} while (x != 13);
-		if (x == 13) {
-			switch (index) {
-			case 0:	
-				if (play())
+			_getch();
+			break;
 
-					std::cout << "You WIN!!!!" << std::endl;
-				else
-					std::cout << "You don't win :(" << std::endl; 
+		case 1:	optionsGame();
+			optionsGame();
+			break;
+
+		case 2:
+			conk({ "YES","NO" }, "Are you want exit the SO MUCH AMAZING GAME REALLY ?");
+			index = conk.keyOptionWork();
+			if (index)
 				break;
-			case 1:	optionsGame();	break; ///setings
-			case 2:
-				index = 1;
-				do {
-					system("cls");
-					std::cout << "are want exit the game" << std::endl;
-					if (index == 0) {
-						std::cout << " + YES" << std::endl;
-						std::cout << "   NO" << std::endl;
-					}
-					else {
-						std::cout << "   YES" << std::endl;
-						std::cout << " + NO" << std::endl;
-					}
-					x = _getch();
-					index = controlKey(0, 1, 0, 1, index, x);
-				} while (x != 13);
-				if (index)
-					break;
-				else std::exit(1);
-			}
+			else std::exit(1);
 		}
+		
 	}
 
 
@@ -99,7 +96,25 @@ bool MENU::play() {
 }
 
 void MENU::optionsGame() {
-
+	int index;
+	conk.operator()({ "1.Change Color","2.Change Size of Font","3.BACK" });
+	conk.setMessage("OPTIONS");
+	index = conk.keyOptionWork();
+	switch (index) {
+	case 0:
+		conk({ "Dzienny","Nocny" },"Set Theme");
+		index = conk.keyOptionWork();
+		if (index)
+			setTheme(Theme::DARK);
+		else
+			setTheme(Theme::LIGHT);
+		break;
+	case 1:
+		///change size font on console
+		break;
+	default:
+		return;
+	}
 }
 
 void MENU::downloadFromFileIntoContainter() noexcept {
@@ -115,11 +130,4 @@ void MENU::downloadFromFileIntoContainter() noexcept {
 	}
 }
 
-void MENU::options() {
-
-}
-
-bool exit() {
-	return false;
-}
 

@@ -1,16 +1,6 @@
 #include "stdafx.h"
 #include "wisielec.h"
 
-inline unsigned int controlKey(int indexMin, int indexMax, int setIndexMin, int setIndexMax, int index, int x) {
-	if (x == 75) index--;
-	else if (x == 77) index++;
-	else if (x == 72) index--;
-	else if (x == 80) index++;
-	if (index > indexMax) index = setIndexMin;
-	if (index < indexMin) index = setIndexMax;
-	return index;
-}
-
 
 wisielec::wisielec(std::string cat, std::string passwd)
 {
@@ -134,6 +124,7 @@ bool wisielec::gameWork() {
 	while (interator < 13) {
 		std::cout << "category is : " << catergory << std::endl;
 		std::cout << "write your letter " << std::endl;
+		writeMap();
 		std::cin >> x;
 		system("cls");
 		if (!checkLetter(x)) {
@@ -143,7 +134,6 @@ bool wisielec::gameWork() {
 		else {
 			std::cout << "good letter" << std::endl;
 		}
-		writeMap();
 		if (writeHangman(interator))
 			return false;
 		if (checkWin())
@@ -151,7 +141,7 @@ bool wisielec::gameWork() {
 		
 	}
 
-	return false; //if user lose
+	return false;
 }
 
 void wisielec::setStrings(std::string s1, std::string s2) {
@@ -163,8 +153,7 @@ void wisielec::setStrings(std::string s1, std::string s2) {
 		pass.push_back(std::pair<char,bool>(password[i], false));
 		if (password[i] == ' ')
 			spaces++;
-	}
-	
+	}	
 }
 
 bool wisielec::checkLetter(char letter) {
