@@ -7,6 +7,7 @@
 
 int main(){
 
+	MENU::
 	MENU::setTheme(MENU::Theme::DARK);
 	MENU m;
     return 0;

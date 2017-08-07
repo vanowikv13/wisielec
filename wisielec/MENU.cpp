@@ -54,8 +54,8 @@ void MENU::gameLoop() {
 			else {
 				std::cout << "You don't win :(" << std::endl;
 				std::cout << "The answer was : " << w->retPass() << std::endl;
-				std::cout << "pers any kind of key to continue " << std::endl;
 			}
+			std::cout << "pers any kind of key to continue ... " << std::endl;
 			_getch();
 			break;
 
@@ -77,43 +77,33 @@ void MENU::gameLoop() {
 }
 
 bool MENU::play() {
-	std::random_device rand;
-	std::default_random_engine el(rand());
-	std::uniform_int_distribution<int> uniform_dist(0, words.size() - 1);
-	int cat = uniform_dist(el);
-	int i = 0;
-	std::pair<std::string, std::vector<std::string>> pi;
-	for (auto&x : words) {
-		if (i == cat)
-			pi = x;
-		i++;
-	}
-	std::uniform_int_distribution<int> unidist(0, pi.second.size());
-	int numb = unidist(el);
-
-	w = new wisielec(pi.first, pi.second[numb]);
-	return w->gameWork();
+	PSS pss = random();
+	w = new wisielec(pss.first, pss.second);
+	return w->gameWork(); //game stared
 }
 
 void MENU::optionsGame() {
 	int index;
-	conk.operator()({ "1.Change Color","2.Change Size of Font","3.BACK" });
-	conk.setMessage("OPTIONS");
-	index = conk.keyOptionWork();
-	switch (index) {
-	case 0:
-		conk({ "Dzienny","Nocny" },"Set Theme");
+	while (true) {
+		conk({ "1.Change Color","2.Change Size of Font and console window","3.BACK" }, "OPTIONS");
 		index = conk.keyOptionWork();
-		if (index)
-			setTheme(Theme::DARK);
-		else
-			setTheme(Theme::LIGHT);
-		break;
-	case 1:
-		///change size font on console
-		break;
-	default:
-		return;
+		switch (index) {
+		case 0:
+			conk({ "Dzienny","Nocny" }, "Set Theme");
+			index = conk.keyOptionWork();
+			if (index)
+				setTheme(Theme::DARK);
+			else
+				setTheme(Theme::LIGHT);
+			break;
+		case 1:
+			resizeConsole();
+			break;
+		case 2:
+			return;
+		default:
+			return;
+		}
 	}
 }
 
@@ -131,3 +121,77 @@ void MENU::downloadFromFileIntoContainter() noexcept {
 }
 
 
+PSS MENU::random() {
+	std::random_device rand;
+	std::default_random_engine el(rand());
+	std::uniform_int_distribution<int> uniform_dist(0, words.size() - 1);
+	int cat = uniform_dist(el);
+	int i = 0;
+	std::pair<std::string, std::vector<std::string>> pi;
+	for (auto&x : words) {
+		if (i == cat)
+			pi = x;
+		i++;
+	}
+	std::uniform_int_distribution<int> unidist(0, pi.second.size());
+	int numb = unidist(el);
+	return PSS(pi.first, pi.second[numb]);
+}
+
+void MENU::resizeConsole() {
+	conk({ "SMALL","NORMAL","BIG","OWN" }, "Set Console Size and Font size");
+	int index = conk.keyOptionWork();
+	switch (index) {
+	case 0:
+		resizeCon(Size::SMALL);
+		break;
+	case 1:
+		resizeCon(Size::NORMAL);
+		break;
+	case 2:
+		resizeCon(Size::BIG);
+		break;
+	case 3:
+		resizeCon(Size::OWN);
+		break;
+	default:
+		resizeCon(Size::NORMAL);
+		break;
+	
+	}
+}
+
+void MENU::resizeCon(Size size = Size::NORMAL) {
+	switch (size) {
+	case Size::SMALL:
+		resize(0,8,FF_DECORATIVE,FW_NORMAL);
+		break;
+	case Size::NORMAL:
+		resize(0, 16, FF_DECORATIVE, FW_NORMAL);
+		break;
+	case Size::BIG:
+		resize(0, 24, FF_DECORATIVE, FW_NORMAL);
+		break;
+	case Size::OWN:
+		resize(0, 24, FF_DECORATIVE, FW_NORMAL);
+		break;
+	default:
+		resize(0, 24, FF_DECORATIVE, FW_NORMAL);
+		break;
+
+	}
+
+
+}
+
+void MENU::resize(int x,int y,UINT fontFamily,UINT fontWeight) {
+	CONSOLE_FONT_INFOEX cfi;
+	cfi.cbSize = sizeof(cfi);
+	cfi.nFont = 0;
+	cfi.dwFontSize.X = x;                   // Width of each character in the font
+	cfi.dwFontSize.Y = y;                  // Height
+	cfi.FontFamily = fontFamily;
+	cfi.FontWeight = fontWeight;
+	std::wcscpy(cfi.FaceName, L"Consolas"); // Choose your font
+	SetCurrentConsoleFontEx(GetStdHandle(STD_OUTPUT_HANDLE), FALSE, &cfi);
+}

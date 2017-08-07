@@ -6,30 +6,29 @@
 #include <string>
 #include <conio.h>
 
+template<typename T>
 class CONTROLKey {
 public:
 
-	CONTROLKey(std::vector<std::string> options,std::string mes="") {
-		initialization(options, mes);
+	CONTROLKey(std::vector<T> options,std::string mes="") {
+		initialization(&options, mes);
 	}
 
 	CONTROLKey() {
-		index = 0; x = 0; a = 0;
-		min = 0; max = 0;
-		message = "";
+		initialization();
 	}
-	CONTROLKey(std::initializer_list<std::string> inilist, std::string mes = "") {
-		std::vector<std::string> vec(inilist);
-		initialization(vec, mes);
+	CONTROLKey(std::initializer_list<T> inilist, std::string mes = "") {
+		std::vector<T> vec(inilist);
+		initialization(&vec, mes);
 	}
 
-	void operator()(std::initializer_list<std::string> inilist,std::string mes = "") {
-		std::vector<std::string> vec(inilist);
-		initialization(vec,mes);
+	void operator()(std::initializer_list<T> inilist,std::string mes = "") {
+		std::vector<T> vec(inilist);
+		initialization(&vec,mes);
 	}
 
-	void operator()(std::vector<std::string> vec, std::string mes = "") {
-		initialization(vec, mes);
+	void operator()(std::vector<T> vec, std::string mes = "") {
+		initialization(&vec, mes);
 	}
 
 	void setMessage(std::string mes) {
@@ -42,7 +41,7 @@ public:
 			system("cls");
 			writeMess();
 
-			for (a = 0; a < words.size();a++) {
+			for (a = 0; a <= words.size() -1;a++) {
 				if (a == index)
 					std::cout << " + ";
 				else std::cout << "   ";
@@ -75,17 +74,18 @@ public:
 		if (message.size() > 0)
 			std::cout << message << std::endl;
 	}
-	void initialization(std::vector<std::string> &options, std::string mes = "") {
-		words = options;
+	void initialization(std::vector<T> *options = nullptr, std::string mes = "") {
+		words = *options;
 		message = mes;
 		index = 0; x = 0;  a = 0;
-		min = 0; max = options.size() - 1;
+		min = 0; max = options->size() - 1;
+		startIndex = 0;
 	}
 
 	~CONTROLKey() {}
 
 protected:
-	std::vector<std::string> words;
+	std::vector<T> words;
 	int index, min, max, x ,a , startIndex;
 	std::string message;
 };
