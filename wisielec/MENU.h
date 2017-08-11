@@ -26,15 +26,13 @@ public:
 	void downloadFromFileIntoContainter() noexcept;
 	//
 	void resizeConsole();
-
 	MENU();
 	~MENU();
 
 protected:
 	Map words;
 	wisielec * w;
-	CONTROLKey<std::string> conk;
-
+	CONTROLKey conk;
 	//resize console window
 	static void MENU::resize(int x, int y, UINT fontFamily, UINT fontWeight);
 	//return password

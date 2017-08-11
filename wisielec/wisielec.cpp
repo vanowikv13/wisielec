@@ -138,7 +138,7 @@ bool wisielec::gameWork() {
 			return false;
 		if (checkWin())
 			return true;
-		
+
 	}
 
 	return false;
@@ -150,10 +150,10 @@ void wisielec::setStrings(std::string s1, std::string s2) {
 	spaces = 0;
 	pass.clear();
 	for (int i = 0; i < password.size(); i++) {
-		pass.push_back(std::pair<char,bool>(password[i], false));
+		pass.push_back(std::pair<char, bool>(password[i], false));
 		if (password[i] == ' ')
 			spaces++;
-	}	
+	}
 }
 
 bool wisielec::checkLetter(char letter) {
@@ -177,7 +177,7 @@ void wisielec::writeMap() {
 			if (x.first == ' ')
 				std::cout << "   ";
 			else
-			std::cout << " _ ";
+				std::cout << " _ ";
 	std::cout << "\n\n";
 }
 

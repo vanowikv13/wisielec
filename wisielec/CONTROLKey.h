@@ -5,33 +5,33 @@
 #include <vector>
 #include <string>
 #include <conio.h>
+#include "err.h"
 
-template<typename T>
 class CONTROLKey {
 public:
 
-	CONTROLKey(std::vector<T> options,std::string mes="") {
-		initialization(&options, mes);
+	inline CONTROLKey(std::vector<std::string> options,std::string mes="") {
+		initialization(options, mes);
 	}
 
-	CONTROLKey() {
-		initialization();
+	inline CONTROLKey() {
+		initialization(std::vector<std::string>());
 	}
-	CONTROLKey(std::initializer_list<T> inilist, std::string mes = "") {
-		std::vector<T> vec(inilist);
-		initialization(&vec, mes);
-	}
-
-	void operator()(std::initializer_list<T> inilist,std::string mes = "") {
-		std::vector<T> vec(inilist);
-		initialization(&vec,mes);
+	inline CONTROLKey(std::initializer_list<std::string> inilist, std::string mes = "") {
+		std::vector<std::string> vec(inilist);
+		initialization(vec, mes);
 	}
 
-	void operator()(std::vector<T> vec, std::string mes = "") {
-		initialization(&vec, mes);
+	inline void operator()(std::initializer_list<std::string> inilist,std::string mes = "") {
+		std::vector<std::string> vec(inilist);
+		initialization(vec,mes);
 	}
 
-	void setMessage(std::string mes) {
+	inline void operator()(std::vector<std::string> vec, std::string mes = "") {
+		initialization(vec, mes);
+	}
+
+	inline void setMessage(std::string mes) {
 		message = mes;
 	}
 
@@ -41,7 +41,7 @@ public:
 			system("cls");
 			writeMess();
 
-			for (a = 0; a <= words.size() -1;a++) {
+			for (a = 0; a <= max;a++) {
 				if (a == index)
 					std::cout << " + ";
 				else std::cout << "   ";
@@ -50,11 +50,13 @@ public:
 			x = _getch();
 			controlKey(x);
 		} while (x != 13);
-
-		return index;
+		if (index <= max)
+			return index;
+		else
+			throw err(L"To big index");
 	}
 
-	void setStartIndex(int StartIndex) {
+	inline void setStartIndex(int StartIndex) {
 		this->startIndex = StartIndex;
 	}
 
@@ -70,22 +72,22 @@ public:
 			index = max;
 	}
 
-	void writeMess() {
+	inline void writeMess() {
 		if (message.size() > 0)
 			std::cout << message << std::endl;
 	}
-	void initialization(std::vector<T> *options = nullptr, std::string mes = "") {
-		words = *options;
+	void initialization(std::vector<std::string> &options, std::string mes = "") {
+		words = options;
 		message = mes;
 		index = 0; x = 0;  a = 0;
-		min = 0; max = options->size() - 1;
+		min = 0; max = options.size() - 1;
 		startIndex = 0;
 	}
 
 	~CONTROLKey() {}
 
 protected:
-	std::vector<T> words;
+	std::vector<std::string> words;
 	int index, min, max, x ,a , startIndex;
 	std::string message;
 };

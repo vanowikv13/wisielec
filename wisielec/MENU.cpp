@@ -10,7 +10,7 @@ MENU::MENU()
 		downloadFromFileIntoContainter();
 	}
 	catch (err er) {
-		MessageBox(HWND(),er.msg.c_str(),nullptr,MB_OK);
+		MessageBox(HWND(), er.msg.c_str(), nullptr, MB_OK);
 	}
 	catch (...) {
 		MessageBox(HWND(), L"Jakis problem", L"no i fajnie", MB_OK);
@@ -70,7 +70,7 @@ void MENU::gameLoop() {
 				break;
 			else std::exit(1);
 		}
-		
+
 	}
 
 
@@ -111,10 +111,10 @@ void MENU::downloadFromFileIntoContainter() noexcept {
 	std::fstream file;
 	std::string line; std::string cat;
 	file.open("wisielec.txt", std::ios::in);
-	if (!file.is_open())throw;
+	if (!file.is_open())throw err(L"Wrong download from file");
 	while (std::getline(file, line)) {
 		if (line.substr(1, 1)[0] == ')')
-			words[(cat = line.substr(2,line.size()))] = std::vector<std::string>();
+			words[(cat = line.substr(2, line.size()))] = std::vector<std::string>();
 		else
 			words[cat].push_back(line);
 	}
@@ -157,14 +157,14 @@ void MENU::resizeConsole() {
 	default:
 		resizeCon(Size::NORMAL);
 		break;
-	
+
 	}
 }
 
 void MENU::resizeCon(Size size = Size::NORMAL) {
 	switch (size) {
 	case Size::SMALL:
-		resize(0,8,FF_DECORATIVE,FW_NORMAL);
+		resize(0, 8, FF_DECORATIVE, FW_NORMAL);
 		break;
 	case Size::NORMAL:
 		resize(0, 16, FF_DECORATIVE, FW_NORMAL);
@@ -184,7 +184,7 @@ void MENU::resizeCon(Size size = Size::NORMAL) {
 
 }
 
-void MENU::resize(int x,int y,UINT fontFamily,UINT fontWeight) {
+void MENU::resize(int x, int y, UINT fontFamily, UINT fontWeight) {
 	CONSOLE_FONT_INFOEX cfi;
 	cfi.cbSize = sizeof(cfi);
 	cfi.nFont = 0;
