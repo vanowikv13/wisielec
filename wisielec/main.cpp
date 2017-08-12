@@ -6,8 +6,9 @@
 
 
 int main(){
-	MENU::resizeCon(MENU::Size::NORMAL);
-	MENU::setTheme(MENU::Theme::DARK);
+
+	OPTIONS::setTheme(OPTIONS::Theme::DARK);
+	OPTIONS::resizeCon(OPTIONS::Size::NORMAL);
 	MENU m;
     return 0;
 }
